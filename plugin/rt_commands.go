@@ -16,10 +16,14 @@ const (
 	MvnCmd       = "mvn"
 	MvnConfig    = "mvn-config"
 	BuildPublish = "build-publish"
+	Publish      = "publish"
+	GradleConfig = "gradle-config"
+	GradleCmd    = "gradle"
 )
 
 func HandleRtCommands(args Args) error {
 
+	fmt.Println("Handling rt command handleRtCommand")
 	commandsList, err := GetRtCommandsList(args)
 	if err != nil {
 		log.Println("Error Unable to get rt commands list err = ", err)
@@ -90,13 +94,27 @@ func GetRtCommandsList(args Args) ([][]string, error) {
 	commandsList := [][]string{}
 	var err error
 
+	fmt.Println("Checking whether mvn build")
 	if args.BuildTool == MvnCmd && (args.Command == "" || args.Command == "build") {
-		log.Println("first handlers")
+		log.Println("mvn build start")
 		commandsList, err = GetMavenBuildCommandArgs(args)
 	}
 
+	fmt.Println("Checking whether mvn publish")
 	if args.BuildTool == MvnCmd && args.Command == "publish" {
 		commandsList, err = GetMavenPublishCommand(args)
+	}
+
+	fmt.Println("Checking whether gradle build")
+	if args.BuildTool == GradleCmd && (args.Command == "" || args.Command == "build") {
+		log.Println("Gradle build start")
+		commandsList, err = GetGradleCommandArgs(args)
+	}
+
+	fmt.Println("Checking whether gradle publish")
+	if args.BuildTool == GradleCmd && args.Command == "publish" {
+		log.Println("Gradle publish start")
+		commandsList, err = GetGradlePublishCommand(args)
 	}
 
 	return commandsList, err
