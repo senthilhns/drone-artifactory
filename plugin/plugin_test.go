@@ -284,7 +284,7 @@ const (
 	RtResolveSnapshotRepo = "mvn_repo_resolve_snapshots_01"
 )
 
-func TestGetGradleCommandArgs(t *testing.T) {
+func TestGetGradleBuildCommandArgs(t *testing.T) {
 	tests := []struct {
 		args   Args
 		output []string
@@ -331,5 +331,65 @@ func TestGetGradleCommandArgs(t *testing.T) {
 			}
 		}
 	}
+}
 
+/*
+build_tool: gradle
+command: publish
+url: https://trialbqpt94.jfrog.io
+username: senthilhns
+password: Asdf1234..
+build_name: 110
+build_number: 111
+repo_resolve: repo_resolve_gradle
+repo_deploy: repo_deploy_gradle_02
+deployer_id: gradle-deployer-01
+*/
+func TestGetGradlePublishCommandArgs(t *testing.T) {
+	tests := []struct {
+		args   Args
+		output []string
+		err    error
+	}{
+		{
+			args: Args{
+				BuildTool:   "gradle",
+				Command:     "publish",
+				URL:         "https://artifactory.test.io/artifactory/",
+				Username:    "user",
+				Password:    "pass",
+				RepoResolve: "repo_resolve_gradle_01",
+				RepoDeploy:  "repo_deploy_gradle_01",
+				BuildName:   "110",
+				BuildNumber: "111",
+				DeployerId:  "tmpSrvConfig",
+			},
+			output: []string{
+				"config add tmpSrvConfig --url=https://artifactory.test.io/artifactory/ --user $PLUGIN_USERNAME --password $PLUGIN_PASSWORD --interactive=false",
+				"gradle-config --repo-deploy=repo_deploy_gradle_01 --repo-resolve=repo_resolve_gradle_01 --server-id-deploy=tmpSrvConfig --server-id-resolve=tmpSrvConfig",
+				"gradle publish -Pusername=user -Ppassword=pass --build-name=110 --build-number=111",
+				"rt build-publish 110 111 --server-id=tmpSrvConfig",
+			},
+			err: nil,
+		},
+	}
+
+	for _, tc := range tests {
+		result, err := GetGradlePublishCommand(tc.args)
+		if err != nil {
+			if tc.err == nil {
+				t.Errorf("Unexpected error: %v", err)
+			} else if err.Error() != tc.err.Error() {
+				t.Errorf("Expected error: %v, Got: %v", tc.err, err)
+			}
+		} else {
+			for i, cmd := range result {
+				cmdStr := strings.Join(cmd, " ")
+				outputStr := tc.output[i]
+				if cmdStr != outputStr {
+					t.Errorf("Mismatch at index %d. Expected: %s, Got: %s", i, outputStr, cmdStr)
+				}
+			}
+		}
+	}
 }
