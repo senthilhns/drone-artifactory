@@ -333,18 +333,6 @@ func TestGetGradleBuildCommandArgs(t *testing.T) {
 	}
 }
 
-/*
-build_tool: gradle
-command: publish
-url: https://trialbqpt94.jfrog.io
-username: senthilhns
-password: Asdf1234..
-build_name: 110
-build_number: 111
-repo_resolve: repo_resolve_gradle
-repo_deploy: repo_deploy_gradle_02
-deployer_id: gradle-deployer-01
-*/
 func TestGetGradlePublishCommandArgs(t *testing.T) {
 	tests := []struct {
 		args   Args
