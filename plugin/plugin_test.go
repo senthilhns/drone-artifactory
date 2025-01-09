@@ -159,8 +159,6 @@ func TestGetMavenBuildCommandUserPassword(t *testing.T) {
 
 	for i, cmd := range cmdList {
 		cmdStr := strings.Join(cmd, " ")
-		fmt.Println(cmdStr)
-
 		ret := strings.Compare(cmdStr, wantCmds[i])
 		if ret != 0 {
 			t.Errorf("Expected: %s, Got: %s", wantCmds[i], cmdStr)
@@ -198,7 +196,6 @@ func TestGetMavenBuildCommandAccessToken(t *testing.T) {
 
 	for i, cmd := range cmdList {
 		cmdStr := strings.Join(cmd, " ")
-		fmt.Println(cmdStr)
 		ret := strings.Compare(cmdStr, wantCmds[i])
 		if ret != 0 {
 			t.Errorf("Expected: %s, Got: %s", wantCmds[i], cmdStr)
@@ -267,7 +264,6 @@ func TestGetMavenPublishCommandAccessToken(t *testing.T) {
 	for i, cmd := range cmdList {
 		cmdStr := strings.Join(cmd, " ")
 		ret := strings.Compare(cmdStr, wantCmds[i])
-		fmt.Printf("\n\n %d |%s|\n", i, cmdStr)
 		if ret != 0 {
 			t.Errorf("Expected: %s, Got: %s", wantCmds[i], cmdStr)
 		}
@@ -287,3 +283,53 @@ const (
 	RtResolveRelRepo      = "mvn_repo_resolve_releases_01"
 	RtResolveSnapshotRepo = "mvn_repo_resolve_snapshots_01"
 )
+
+func TestGetGradleCommandArgs(t *testing.T) {
+	tests := []struct {
+		args   Args
+		output []string
+		err    error
+	}{
+		{
+			args: Args{
+				BuildTool:   "gradle",
+				Username:    "user",
+				Password:    "pass",
+				URL:         "https://artifactory.test.io/artifactory/",
+				RepoResolve: "repo_resolve_gradle_01",
+				RepoDeploy:  "repo_deploy_gradle_01",
+				GradleTasks: "clean build",
+				BuildName:   "110",
+				BuildNumber: "111",
+			},
+			output: []string{
+				"config add tmpSrvConfig --url=https://artifactory.test.io/artifactory/ " +
+					"--user $PLUGIN_USERNAME --password $PLUGIN_PASSWORD --interactive=false",
+				"gradle-config --repo-deploy=repo_deploy_gradle_01 --repo-resolve=repo_resolve_gradle_01",
+				"gradle clean build --build-name=110 --build-number=111",
+			},
+			err: nil,
+		},
+	}
+
+	for _, tc := range tests {
+		result, err := GetGradleCommandArgs(tc.args)
+		if err != nil {
+			if tc.err == nil {
+				t.Errorf("Unexpected error: %v", err)
+			} else if err.Error() != tc.err.Error() {
+				t.Errorf("Expected error: %v, Got: %v", tc.err, err)
+			}
+		} else {
+
+			for i, cmd := range result {
+				cmdStr := strings.Join(cmd, " ")
+				outputStr := tc.output[i]
+				if cmdStr != outputStr {
+					t.Errorf("Mismatch at index %d. Expected: %s, Got: %s", i, outputStr, cmdStr)
+				}
+			}
+		}
+	}
+
+}
