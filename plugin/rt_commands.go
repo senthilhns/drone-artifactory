@@ -142,6 +142,13 @@ func ExecCommand(args Args, cmdArgs []string) error {
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, "JFROG_CLI_OFFER_CONFIG=false")
 
+	if args.AccessToken != "" {
+		fmt.Println("setting access token JFROG_CLI_ACCESS_TOKEN ")
+		cmd.Env = append(cmd.Env, "JFROG_CLI_ACCESS_TOKEN="+args.AccessToken)
+		fmt.Println("setting access token JFROG_ACCESS_TOKEN")
+		cmd.Env = append(cmd.Env, "JFROG_ACCESS_TOKEN="+args.AccessToken)
+	}
+
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	trace(cmd)
