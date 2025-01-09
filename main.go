@@ -6,8 +6,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/drone/drone-artifactory/plugin"
 
 	"github.com/kelseyhightower/envconfig"
@@ -15,10 +13,6 @@ import (
 )
 
 func main() {
-
-	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 	logrus.SetFormatter(new(formatter))
 
 	var args plugin.Args

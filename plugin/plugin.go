@@ -80,8 +80,6 @@ type Args struct {
 // Exec executes the plugin.
 func Exec(ctx context.Context, args Args) error {
 
-	fmt.Println("executing plugin")
-
 	if args.BuildTool != "" {
 		log.Println("Handle RT commands")
 		return HandleRtCommands(args)

@@ -23,7 +23,6 @@ const (
 
 func HandleRtCommands(args Args) error {
 
-	fmt.Println("Handling rt command handleRtCommand")
 	commandsList, err := GetRtCommandsList(args)
 	if err != nil {
 		log.Println("Error Unable to get rt commands list err = ", err)
@@ -94,24 +93,20 @@ func GetRtCommandsList(args Args) ([][]string, error) {
 	commandsList := [][]string{}
 	var err error
 
-	fmt.Println("Checking whether mvn build")
 	if args.BuildTool == MvnCmd && (args.Command == "" || args.Command == "build") {
 		log.Println("mvn build start")
 		commandsList, err = GetMavenBuildCommandArgs(args)
 	}
 
-	fmt.Println("Checking whether mvn publish")
 	if args.BuildTool == MvnCmd && args.Command == "publish" {
 		commandsList, err = GetMavenPublishCommand(args)
 	}
 
-	fmt.Println("Checking whether gradle build")
 	if args.BuildTool == GradleCmd && (args.Command == "" || args.Command == "build") {
 		log.Println("Gradle build start")
 		commandsList, err = GetGradleCommandArgs(args)
 	}
 
-	fmt.Println("Checking whether gradle publish")
 	if args.BuildTool == GradleCmd && args.Command == "publish" {
 		log.Println("Gradle publish start")
 		commandsList, err = GetGradlePublishCommand(args)
@@ -142,13 +137,6 @@ func ExecCommand(args Args, cmdArgs []string) error {
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, "JFROG_CLI_OFFER_CONFIG=false")
 
-	if args.AccessToken != "" {
-		fmt.Println("setting access token JFROG_CLI_ACCESS_TOKEN ")
-		cmd.Env = append(cmd.Env, "JFROG_CLI_ACCESS_TOKEN="+args.AccessToken)
-		fmt.Println("setting access token JFROG_ACCESS_TOKEN")
-		cmd.Env = append(cmd.Env, "JFROG_ACCESS_TOKEN="+args.AccessToken)
-	}
-
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	trace(cmd)
@@ -161,7 +149,7 @@ func ExecCommand(args Args, cmdArgs []string) error {
 
 	if args.PublishBuildInfo {
 		if err := publishBuildInfo(args); err != nil {
-			fmt.Println("Error publishing build info: ", err)
+			log.Println("Error publishing build info: ", err)
 			return err
 		}
 	}

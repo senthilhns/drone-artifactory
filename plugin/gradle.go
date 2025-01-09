@@ -64,8 +64,6 @@ func GetGradleCommandArgs(args Args) ([][]string, error) {
 
 func GetGradlePublishCommand(args Args) ([][]string, error) {
 
-	fmt.Println("GetGradlePublishCommand")
-
 	var cmdList [][]string
 	var jfrogConfigAddConfigCommandArgs []string
 
@@ -113,10 +111,5 @@ func GetGradlePublishCommand(args Args) ([][]string, error) {
 	cmdList = append(cmdList, rtPublishCommandArgs)
 	cmdList = append(cmdList, rtPublishBuildInfoCommandArgs)
 
-	for _, cmd := range cmdList {
-		fmt.Println("#################################")
-		fmt.Println(cmd)
-	}
-	fmt.Println("")
 	return cmdList, nil
 }
