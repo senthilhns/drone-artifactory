@@ -86,9 +86,16 @@ func GetGradlePublishCommand(args Args) ([][]string, error) {
 	gradleConfigCommandArgs = append(gradleConfigCommandArgs, "--server-id-deploy="+tmpServerId)
 	gradleConfigCommandArgs = append(gradleConfigCommandArgs, "--server-id-resolve="+tmpServerId)
 
-	rtPublishCommandArgs := []string{"gradle", Publish,
-		"-Pusername=" + args.Username, "-Ppassword=" + args.Password,
-		"--build-name=" + args.BuildName, "--build-number=" + args.BuildNumber}
+	rtPublishCommandArgs := []string{"gradle", Publish}
+	switch {
+	case args.Username != "":
+		rtPublishCommandArgs = append(rtPublishCommandArgs, "-Pusername="+args.Username)
+		rtPublishCommandArgs = append(rtPublishCommandArgs, "-Ppassword="+args.Password)
+	case args.AccessToken != "":
+		rtPublishCommandArgs = append(rtPublishCommandArgs, "-PaccessToken="+args.AccessToken)
+	}
+	rtPublishCommandArgs = append(rtPublishCommandArgs, "--build-name="+args.BuildName)
+	rtPublishCommandArgs = append(rtPublishCommandArgs, "--build-number="+args.BuildNumber)
 
 	rtPublishBuildInfoCommandArgs := []string{"rt", BuildPublish, args.BuildName, args.BuildNumber,
 		"--server-id=" + tmpServerId}
