@@ -10,6 +10,20 @@ import (
 	"testing"
 )
 
+const (
+	RtUrlTestStr          = "https://artifactory.test.io/artifactory/"
+	RtAccessToken         = "qXsj28"
+	RtMvnBuildTool        = "mvn"
+	RtBuildName           = "t2"
+	RtBuildNumber         = "v1.0"
+	RtDeployerId          = "deploy_gen_maven_01"
+	RtTestRelRepo         = "mvn_repo_deploy_releases_01"
+	RtTestSnapshotRepo    = "mvn_repo_deploy_snapshots_01"
+	RtRslvId              = "resolve_gen_maven_01"
+	RtResolveRelRepo      = "mvn_repo_resolve_releases_01"
+	RtResolveSnapshotRepo = "mvn_repo_resolve_snapshots_01"
+)
+
 func TestSetAuthParams(t *testing.T) {
 	tests := []struct {
 		cmdArgs []string
@@ -270,20 +284,6 @@ func TestGetMavenPublishCommandAccessToken(t *testing.T) {
 	}
 }
 
-const (
-	RtUrlTestStr          = "https://artifactory.test.io/artifactory/"
-	RtAccessToken         = "qXsj28"
-	RtMvnBuildTool        = "mvn"
-	RtBuildName           = "t2"
-	RtBuildNumber         = "v1.0"
-	RtDeployerId          = "deploy_gen_maven_01"
-	RtTestRelRepo         = "mvn_repo_deploy_releases_01"
-	RtTestSnapshotRepo    = "mvn_repo_deploy_snapshots_01"
-	RtRslvId              = "resolve_gen_maven_01"
-	RtResolveRelRepo      = "mvn_repo_resolve_releases_01"
-	RtResolveSnapshotRepo = "mvn_repo_resolve_snapshots_01"
-)
-
 func TestGetGradleBuildCommandArgs(t *testing.T) {
 	tests := []struct {
 		args   Args
@@ -295,18 +295,18 @@ func TestGetGradleBuildCommandArgs(t *testing.T) {
 				BuildTool:   "gradle",
 				Username:    "user",
 				Password:    "pass",
-				URL:         "https://artifactory.test.io/artifactory/",
-				RepoResolve: "repo_resolve_gradle_01",
-				RepoDeploy:  "repo_deploy_gradle_01",
+				URL:         RtUrlTestStr,
+				RepoResolve: RtResolveRelRepo,
+				RepoDeploy:  RtTestRelRepo,
 				GradleTasks: "clean build",
-				BuildName:   "110",
-				BuildNumber: "111",
+				BuildName:   RtBuildName,
+				BuildNumber: RtBuildNumber,
 			},
 			output: []string{
-				"config add tmpSrvConfig --url=https://artifactory.test.io/artifactory/ " +
-					"--user $PLUGIN_USERNAME --password $PLUGIN_PASSWORD --interactive=false",
-				"gradle-config --repo-deploy=repo_deploy_gradle_01 --repo-resolve=repo_resolve_gradle_01",
-				"gradle clean build --build-name=110 --build-number=111",
+				"config add tmpSrvConfig --url=" + RtUrlTestStr +
+					" --user $PLUGIN_USERNAME --password $PLUGIN_PASSWORD --interactive=false",
+				"gradle-config --repo-deploy=" + RtTestRelRepo + " --repo-resolve=" + RtResolveRelRepo,
+				"gradle clean build --build-name=" + RtBuildName + " --build-number=" + RtBuildNumber,
 			},
 			err: nil,
 		},
@@ -321,7 +321,6 @@ func TestGetGradleBuildCommandArgs(t *testing.T) {
 				t.Errorf("Expected error: %v, Got: %v", tc.err, err)
 			}
 		} else {
-
 			for i, cmd := range result {
 				cmdStr := strings.Join(cmd, " ")
 				outputStr := tc.output[i]
@@ -343,20 +342,23 @@ func TestGetGradlePublishCommandArgs(t *testing.T) {
 			args: Args{
 				BuildTool:   "gradle",
 				Command:     "publish",
-				URL:         "https://artifactory.test.io/artifactory/",
+				URL:         RtUrlTestStr,
 				Username:    "user",
 				Password:    "pass",
-				RepoResolve: "repo_resolve_gradle_01",
-				RepoDeploy:  "repo_deploy_gradle_01",
-				BuildName:   "110",
-				BuildNumber: "111",
-				DeployerId:  "tmpSrvConfig",
+				RepoResolve: RtResolveRelRepo,
+				RepoDeploy:  RtTestRelRepo,
+				BuildName:   RtBuildName,
+				BuildNumber: RtBuildNumber,
+				DeployerId:  RtDeployerId,
 			},
 			output: []string{
-				"config add tmpSrvConfig --url=https://artifactory.test.io/artifactory/ --user $PLUGIN_USERNAME --password $PLUGIN_PASSWORD --interactive=false",
-				"gradle-config --repo-deploy=repo_deploy_gradle_01 --repo-resolve=repo_resolve_gradle_01 --server-id-deploy=tmpSrvConfig --server-id-resolve=tmpSrvConfig",
-				"gradle publish -Pusername=user -Ppassword=pass --build-name=110 --build-number=111",
-				"rt build-publish 110 111 --server-id=tmpSrvConfig",
+				"config add " + RtDeployerId + " --url=" + RtUrlTestStr +
+					" --user $PLUGIN_USERNAME --password $PLUGIN_PASSWORD --interactive=false",
+				"gradle-config --repo-deploy=" + RtTestRelRepo + " --repo-resolve=" +
+					RtResolveRelRepo + " --server-id-deploy=" + RtDeployerId + " --server-id-resolve=" + RtDeployerId,
+				"gradle publish -Pusername=user -Ppassword=pass --build-name=" +
+					RtBuildName + " --build-number=" + RtBuildNumber,
+				"rt build-publish " + RtBuildName + " " + RtBuildNumber + " --server-id=" + RtDeployerId,
 			},
 			err: nil,
 		},
