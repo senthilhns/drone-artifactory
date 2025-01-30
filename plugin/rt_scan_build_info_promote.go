@@ -12,18 +12,18 @@ func GetScanCommandArgs(args Args) ([][]string, error) {
 		return cmdList, errors.New("Valid BuildName and BuildNumber are required")
 	}
 
-	tmpServerId := tmpServerId
-	jfrogConfigAddConfigCommandArgs, err := GetConfigAddConfigCommandArgs(tmpServerId,
-		args.Username, args.Password, args.URL, args.AccessToken, args.APIKey)
+	authParams, err := setAuthParams([]string{}, Args{Username: args.Username,
+		Password: args.Password, AccessToken: args.AccessToken, APIKey: args.APIKey})
 	if err != nil {
-		log.Println("GetConfigAddConfigCommandArgs error: ", err)
 		return cmdList, err
 	}
 
 	scanCommandArgs := []string{
 		"build-scan", args.BuildName, args.BuildNumber}
-	cmdList = append(cmdList, jfrogConfigAddConfigCommandArgs)
+	scanCommandArgs = append(scanCommandArgs, "--url="+args.URL)
+	scanCommandArgs = append(scanCommandArgs, authParams...)
 	cmdList = append(cmdList, scanCommandArgs)
+
 	return cmdList, nil
 }
 

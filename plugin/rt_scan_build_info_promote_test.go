@@ -20,8 +20,6 @@ func TestGetScanCommandUserPassword(t *testing.T) {
 	}
 
 	wantCmds := []string{
-		"config add tmpServerId --url=https://artifactory.test.io/artifactory/ --user $PLUGIN_USERNAME --password $PLUGIN_PASSWORD " +
-			"--interactive=false",
 		"build-scan t2 v1.0",
 	}
 
