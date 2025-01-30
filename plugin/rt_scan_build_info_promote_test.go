@@ -104,9 +104,8 @@ func TestPromoteBuildCommandUserPassword(t *testing.T) {
 	}
 
 	wantCmds := []string{
-		"config add tmpServerId --url=https://artifactory.test.io/artifactory/ --user $PLUGIN_USERNAME --password " +
-			"$PLUGIN_PASSWORD --interactive=false",
-		"rt build-promote --copy=true t2 v1.0 promoted-repo",
+		"rt build-promote --copy=true --url=https://artifactory.test.io/artifactory/ t2 v1.0 promoted-repo " +
+			"--user $PLUGIN_USERNAME --password $PLUGIN_PASSWORD",
 	}
 
 	for i, cmd := range cmdList {
