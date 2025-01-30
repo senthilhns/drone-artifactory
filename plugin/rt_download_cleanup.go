@@ -52,13 +52,7 @@ func GetDownloadCommandArgs(args Args) ([][]string, error) {
 
 func GetCleanupCommandArgs(args Args) ([][]string, error) {
 	var cmdList [][]string
-	jfrogConfigAddConfigCommandArgs, err := GetConfigAddConfigCommandArgs(tmpServerId,
-		args.Username, args.Password, args.URL, args.AccessToken, args.APIKey)
-	if err != nil {
-		return cmdList, err
-	}
 	cleanupCommandArgs := []string{"rt", "build-clean", args.BuildName, args.BuildNumber}
-	cmdList = append(cmdList, jfrogConfigAddConfigCommandArgs)
 	cmdList = append(cmdList, cleanupCommandArgs)
 	return cmdList, nil
 }

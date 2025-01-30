@@ -84,8 +84,6 @@ func TestGetCleanupCommandUserPassword(t *testing.T) {
 	}
 
 	wantCmds := []string{
-		"config add tmpServerId --url=https://artifactory.test.io/artifactory/ " +
-			"--user $PLUGIN_USERNAME --password $PLUGIN_PASSWORD --interactive=false",
 		"rt build-clean t2 v1.0",
 	}
 
