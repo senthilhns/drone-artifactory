@@ -30,15 +30,7 @@ func GetScanCommandArgs(args Args) ([][]string, error) {
 func GetCreateBuildInfoCommandArgs(args Args) ([][]string, error) {
 	var cmdList [][]string
 
-	tmpServerId := tmpServerId
-	jfrogConfigAddConfigCommandArgs, err := GetConfigAddConfigCommandArgs(tmpServerId,
-		args.Username, args.Password, args.URL, args.AccessToken, args.APIKey)
-	if err != nil {
-		log.Println("GetConfigAddConfigCommandArgs error: ", err)
-		return cmdList, err
-	}
 	buildCollectEnvCommandArgs := []string{"rt", "build-collect-env", args.BuildName, args.BuildNumber}
-	cmdList = append(cmdList, jfrogConfigAddConfigCommandArgs)
 	cmdList = append(cmdList, buildCollectEnvCommandArgs)
 	return cmdList, nil
 }

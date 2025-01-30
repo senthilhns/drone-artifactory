@@ -45,8 +45,6 @@ func TestGetBuildInfoCollectCommandUserAccessToken(t *testing.T) {
 	}
 
 	wantCmds := []string{
-		"config add tmpServerId --url=https://artifactory.test.io/artifactory/ --access-token $PLUGIN_ACCESS_TOKEN " +
-			"--interactive=false",
 		"rt build-collect-env t2 v1.0",
 	}
 
