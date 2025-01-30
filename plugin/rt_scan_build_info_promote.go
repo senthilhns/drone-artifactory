@@ -12,7 +12,7 @@ func GetScanCommandArgs(args Args) ([][]string, error) {
 		return cmdList, errors.New("Valid BuildName and BuildNumber are required")
 	}
 
-	tmpServerId := "tmpServeId"
+	tmpServerId := tmpServerId
 	jfrogConfigAddConfigCommandArgs, err := GetConfigAddConfigCommandArgs(tmpServerId,
 		args.Username, args.Password, args.URL, args.AccessToken, args.APIKey)
 	if err != nil {
@@ -30,7 +30,7 @@ func GetScanCommandArgs(args Args) ([][]string, error) {
 func GetCreateBuildInfoCommandArgs(args Args) ([][]string, error) {
 	var cmdList [][]string
 
-	tmpServerId := "tmpServeId"
+	tmpServerId := tmpServerId
 	jfrogConfigAddConfigCommandArgs, err := GetConfigAddConfigCommandArgs(tmpServerId,
 		args.Username, args.Password, args.URL, args.AccessToken, args.APIKey)
 	if err != nil {
@@ -46,7 +46,7 @@ func GetCreateBuildInfoCommandArgs(args Args) ([][]string, error) {
 func GetBuildInfoPublishCommandArgs(args Args) ([][]string, error) {
 	var cmdList [][]string
 
-	tmpServerId := "tmpServeId"
+	tmpServerId := tmpServerId
 	jfrogConfigAddConfigCommandArgs, err := GetConfigAddConfigCommandArgs(tmpServerId,
 		args.Username, args.Password, args.URL, args.AccessToken, args.APIKey)
 	if err != nil {
@@ -66,7 +66,7 @@ func GetBuildInfoPublishCommandArgs(args Args) ([][]string, error) {
 func GetPromoteCommandArgs(args Args) ([][]string, error) {
 	var cmdList [][]string
 
-	tmpServerId := "tmpServeId"
+	tmpServerId := tmpServerId
 	jfrogConfigAddConfigCommandArgs, err := GetConfigAddConfigCommandArgs(tmpServerId,
 		args.Username, args.Password, args.URL, args.AccessToken, args.APIKey)
 	if err != nil {
