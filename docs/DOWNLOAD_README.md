@@ -61,7 +61,7 @@ The spec json format should be the same as Jfrog spec format
         password: <+secrets.getValue("jfrog_user")>
         build_name: gol-01
         build_number: 0.03.01
-        url: https://URL.jfrog.io/artifactory/artifactory-test 
+        url: https://URL.jfrog.io/artifactory 
         spec: |
           {
             "files": [
