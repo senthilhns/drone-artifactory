@@ -17,14 +17,17 @@ import (
 
 func CheckAndCertFileReadFile(filePath string) (string, error) {
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		fmt.Println("file does not exist")
 		return "", fmt.Errorf("file does not exist: %s", filePath)
 	} else if err != nil {
+		fmt.Println("error checking file")
 		return "", fmt.Errorf("error checking file: %v", err)
 	}
 
 	// Read the file contents
 	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
+		fmt.Println("error reading file")
 		return "", fmt.Errorf("error reading file: %v", err)
 	}
 
@@ -35,7 +38,10 @@ func main() {
 
 	fmt.Println("============= no cert file =============")
 	filePath := `C:\users\ContainerAdministrator\.jfrog\security\certs\cert.windows.pem`
-	_, _ = CheckAndCertFileReadFile(filePath)
+	_, e := CheckAndCertFileReadFile(filePath)
+	if e != nil {
+		fmt.Println(e)
+	}
 
 	logrus.SetFormatter(new(formatter))
 
