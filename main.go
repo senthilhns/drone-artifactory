@@ -6,13 +6,37 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/drone/drone-artifactory/plugin"
+	"io/ioutil"
+	"os"
 
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 )
 
+func CheckAndCertFileReadFile(filePath string) (string, error) {
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		return "", fmt.Errorf("file does not exist: %s", filePath)
+	} else if err != nil {
+		return "", fmt.Errorf("error checking file: %v", err)
+	}
+
+	// Read the file contents
+	content, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return "", fmt.Errorf("error reading file: %v", err)
+	}
+
+	return string(content), nil
+}
+
 func main() {
+
+	fmt.Println("============= no cert file =============")
+	filePath := `C:\users\ContainerAdministrator\.jfrog\security\certs\cert.windows.pem`
+	_, _ = CheckAndCertFileReadFile(filePath)
+
 	logrus.SetFormatter(new(formatter))
 
 	var args plugin.Args
